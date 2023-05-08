@@ -1,0 +1,24 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shopify_store_app/shopify_models/models/src/shopify_user/address/address.dart';
+
+part 'addresses.freezed.dart';
+part 'addresses.g.dart';
+
+@Freezed(makeCollectionsUnmodifiable: false)
+class Addresses with _$Addresses {
+  const Addresses._();
+  factory Addresses({required List<Address> addressList}) = _Addresses;
+  factory Addresses.fromJson(Map<String, dynamic> json) =>
+      _$AddressesFromJson(json);
+
+  static Addresses fromGraphJson(Map<String, dynamic> json) {
+    return Addresses(addressList: _getAddressList(json));
+  }
+
+  static _getAddressList(Map<String, dynamic> json) {
+    List<Address> addressList = [];
+    json['edges']?.forEach((address) =>
+        addressList.add(Address.fromGraphJson(address ?? const [])));
+    return addressList;
+  }
+}
