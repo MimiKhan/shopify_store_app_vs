@@ -6,6 +6,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:get/get.dart';
 import 'package:shopify_store_app/controllers/cart_controller.dart';
 import 'package:shopify_store_app/core/utils/custom_icons.dart';
+import 'package:shopify_store_app/new_ui_designs/cart_screen/cart_screen_new_design.dart';
 import 'package:shopify_store_app/new_ui_designs/home_screen/ui/home_screen_ui.dart';
 import 'package:shopify_store_app/services/hex_color.dart';
 import 'package:shopify_store_app/theme/app_style.dart';
@@ -200,7 +201,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   }
 
   _navigateToCartScreen() {
-    Get.to(() => CartScreen2());
+    // Get.to(() => CartScreen2());
+    Get.to(() => const NewCartScreen());
   }
 
   // buildNavigationBar() {

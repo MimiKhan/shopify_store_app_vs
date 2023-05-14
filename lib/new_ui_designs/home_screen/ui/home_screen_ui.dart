@@ -234,8 +234,8 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
                                                 .indexOf(entry);
                                             return GestureDetector(
                                               child: Container(
-                                                width: 12.0,
-                                                height: 12.0,
+                                                width: 7.0,
+                                                height: 7.0,
                                                 margin:
                                                     const EdgeInsets.symmetric(
                                                         vertical: 8.0,
@@ -310,22 +310,35 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
                                           horizontal: 5.0),
                                       child: SizedBox(
                                         // Set the width of the container to a fixed value
-                                        child: ChoiceChip(
-                                          labelStyle: controller.chipIndex ==
-                                                  index
-                                              ? AppStyle.gfPoppinsMediumWhite(
-                                                  fontSize: 12)
-                                              : AppStyle.gfPoppinsMediumGrey(
-                                                  fontSize: 12),
-                                          selectedColor: HexColor("#D35F5F"),
-                                          backgroundColor: Colors.transparent,
-                                          label: Text(choice),
-                                          selected:
-                                              controller.chipIndex == index,
-                                          onSelected: (selected) {
-                                            controller.setChipIndex(
-                                                newIndex: index);
-                                          },
+                                        child: Theme(
+                                          data: ThemeData(
+                                              iconTheme: const IconThemeData(
+                                            color: Colors.white,
+                                          )),
+                                          child: ChoiceChip(
+                                            labelStyle: controller.chipIndex ==
+                                                    index
+                                                ? AppStyle.gfPoppinsMediumWhite(
+                                                    fontSize: 12)
+                                                : AppStyle.gfPoppinsMediumGrey(
+                                                    fontSize: 12),
+                                            selectedColor: HexColor("#D35F5F"),
+                                            backgroundColor: Colors.transparent,
+                                            label: Text(choice),
+                                            selected:
+                                                controller.chipIndex == index,
+                                            onSelected: (selected) {
+                                              controller.setChipIndex(
+                                                  newIndex: index);
+                                            },
+                                            avatar:
+                                                controller.chipIndex == index
+                                                    ? const Icon(
+                                                        Icons.check,
+                                                        size: 16,
+                                                      )
+                                                    : null,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -595,24 +608,21 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
                                                               MainAxisAlignment
                                                                   .start,
                                                           children: [
-                                                            ClipRRect(
-                                                              borderRadius: const BorderRadius
-                                                                      .only(
-                                                                  topLeft: Radius
-                                                                      .circular(
-                                                                          7),
-                                                                  topRight: Radius
-                                                                      .circular(
-                                                                          7)),
-                                                              child: SizedBox(
-                                                                height: 187,
-                                                                width: 165,
+                                                            Container(
+                                                              height: 187,
+                                                              width: 165,
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            7),
                                                                 child:
                                                                     CachedNetworkImage(
                                                                   imageUrl: controller
                                                                       .bestSellingProducts[
                                                                           gridViewIndex]
-                                                                      .images[0]
+                                                                      .images
+                                                                      .first
                                                                       .originalSrc,
                                                                   placeholder: (context,
                                                                           url) =>
@@ -627,7 +637,7 @@ class _HomeScreenUIState extends State<HomeScreenUI> {
                                                                           Icons
                                                                               .error),
                                                                   fit: BoxFit
-                                                                      .contain,
+                                                                      .fill,
                                                                 ),
                                                               ),
                                                             ),

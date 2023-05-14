@@ -29,7 +29,7 @@ class CartController extends GetxController {
   Future<List<CountryDataModel>> getCountryData() async {
     await Future.delayed(const Duration(seconds: 1));
     final jsonData =
-    await rootBundle.loadString('assets/json/country_data.json');
+        await rootBundle.loadString('assets/json/country_data.json');
     final jsonList = jsonDecode(jsonData) as List<dynamic>;
 
     return jsonList.map((e) => CountryDataModel.fromJson(e)).toList();
@@ -56,13 +56,13 @@ class CartController extends GetxController {
   Future<List<CartLine>> getCartLines(
       List<CartModel> cartModelItemsList) async {
     for (var cartModelItem in cartModelItems) {
-      linesFromCart.add(CartLine(merchandise: cartModelItem.productVariant,
+      linesFromCart.add(CartLine(
+          merchandise: cartModelItem.productVariant,
           quantity: cartModelItem.quantity));
     }
     update();
     return linesFromCart.value;
   }
-
 
   void addItem(CartModel item) {
     if (cartModelItems.any((i) {
@@ -74,8 +74,8 @@ class CartController extends GetxController {
     } else {
       cartModelItems.add(item);
     }
+    update();
   }
-
 
   void updateQuantity(CartModel item, int newQuantity) {
     int index = cartModelItems.indexOf(item);

@@ -9,6 +9,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:html2md/html2md.dart' as html2md;
 import 'package:shopify_store_app/controllers/cart_controller.dart';
 import 'package:shopify_store_app/controllers/wish_list_controller.dart';
+import 'package:shopify_store_app/core/utils/custom_icons.dart';
+import 'package:shopify_store_app/models/cart_model.dart';
 import 'package:shopify_store_app/services/hex_color.dart';
 import 'package:shopify_store_app/shopify_models/models/src/product/option/option.dart';
 import 'package:shopify_store_app/shopify_models/models/src/product/product.dart';
@@ -57,6 +59,10 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
   String? option1Selected;
   String? option2Selected;
   String? option3Selected;
+
+  // String product_variant_selected_str = '';
+  ProductVariant? productVariantSelected;
+  final int _quantity = 1;
 
   @override
   void initState() {
@@ -194,16 +200,15 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
         padding: const EdgeInsets.symmetric(horizontal: 36.0),
         child: BottomAppBar(
           padding: const EdgeInsets.symmetric(vertical: 5),
-          height: 65,
+          height: 56,
           elevation: 0,
           color: HexColor("#F8F8F8"),
           child: FilledButton.icon(
             onPressed: () {
-              // cartController.addItem(CartModel(
-              //     productVariant: _productVariant,
-              //     product: product,
-              //     quantity: _quantity));
-              printOptionsSelected();
+              cartController.addItem(CartModel(
+                  productVariant: _productVariant,
+                  product: widget.product,
+                  quantity: _quantity));
               Fluttertoast.showToast(
                   msg:
                       '${widget.product.title} added to cart. Cart : ${cartController.cartModelItemsCount}');
@@ -216,10 +221,13 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
                 borderRadius: BorderRadius.circular(13),
               ),
             ),
-            icon: const Icon(CupertinoIcons.bag_badge_plus),
+            icon: const Icon(
+              CustomIcons.cart,
+              size: 20,
+            ),
             label: Text(
               "Add To Cart",
-              style: AppStyle.gfPoppinsRegularWhite(fontSize: 20),
+              style: AppStyle.gfPoppinsRegularWhite(fontSize: 13),
             ),
           ),
         ),
@@ -395,13 +403,6 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
                                     bool isAvailable =
                                         false; // check if the size is available in selected color
                                     if (isSelectable) {
-                                      // if (index == 0 &&
-                                      //     isSizeCardEnabled.isEmpty) {
-                                      //   // Set the first item as selected if no items are currently selected
-                                      //   isSizeCardEnabled.add(true);
-                                      // } else {
-                                      //   isSizeCardEnabled.add(false);
-                                      // }
                                       isOption1CardEnabled.add(false);
 
                                       return GestureDetector(
@@ -423,6 +424,7 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
                                           if (option2Values.isNotEmpty) {
                                             updateOption2(option1Selected!);
                                           }
+                                          setState(() {});
 
                                           // debugPrint(
                                           //     "Selected Size :: ${sizeOptions[sizeIndex]}");
@@ -590,6 +592,7 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
                                                   option2Selected!);
                                             }
                                           }
+                                          setState(() {});
                                         },
                                         child: Padding(
                                           padding:
@@ -705,14 +708,14 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
                                     bool isSelectable = index % 2 == 0;
 
                                     if (isSelectable) {
-                                      if (index == 0 &&
-                                          isOption3CardEnabled.isEmpty) {
-                                        // Set the first item as selected if no items are currently selected
-                                        isOption3CardEnabled.add(true);
-                                      } else {
-                                        isOption3CardEnabled.add(false);
-                                      }
-                                      // isOption3CardEnabled.add(false);
+                                      // if (index == 0 &&
+                                      //     isOption3CardEnabled.isEmpty) {
+                                      //   // Set the first item as selected if no items are currently selected
+                                      //   isOption3CardEnabled.add(true);
+                                      // } else {
+                                      //   isOption3CardEnabled.add(false);
+                                      // }
+                                      isOption3CardEnabled.add(false);
                                       return GestureDetector(
                                         onTap: () {
                                           isOption3CardEnabled.replaceRange(
@@ -726,6 +729,13 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
                                               true;
                                           option3Selected =
                                               option3Values[nestedIndex];
+                                          setState(() {});
+                                          var product_variant_selected_str =
+                                              "${option1Selected!} / ${option2Selected!} / ${option3Selected!}";
+                                          getProductVariant(
+                                              product_variant_selected_str);
+                                          debugPrint(
+                                              "Product variants selected : $product_variant_selected_str:");
                                         },
                                         child: Padding(
                                           padding:
@@ -834,135 +844,16 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
     );
   }
 
-  // void update2ndOptions(String selectedOption) {
-  //   debugPrint(
-  //       "Update Option Called... 1st option selected : ${selectedOption} :");
-  //   option2Values.clear();
-  //   // option3Values.clear();
-
-  //   for (ProductVariant variant in widget.product.productVariants) {
-  //     if (variant.title.removeAllWhitespace.split("/").first ==
-  //             selectedOption &&
-  //         variant.quantityAvailable != null &&
-  //         variant.quantityAvailable! > 0) {
-  //       if (variant.title.removeAllWhitespace.split("/")[1] != null &&
-  //           !option2Values
-  //               .contains(variant.title.removeAllWhitespace.split("/")[1])) {
-  //         bool option2HasAvailableQuantity = false;
-  //         for (ProductVariant variant2 in widget.product.productVariants) {
-  //           if (variant2.title.removeAllWhitespace.split("/").first ==
-  //                   selectedOption &&
-  //               variant2.title.removeAllWhitespace.split("/")[1] ==
-  //                   variant.title.removeAllWhitespace.split("/")[1] &&
-  //               variant2.quantityAvailable != null &&
-  //               variant2.quantityAvailable! > 0) {
-  //             option2HasAvailableQuantity = true;
-  //             break;
-  //           }
-  //         }
-  //         if (option2HasAvailableQuantity) {
-  //           option2Values.add(variant.title.removeAllWhitespace.split("/")[1]);
-  //         }
-  //       }
-
-  //       // if (variant.title.removeAllWhitespace.split("/").last != null &&
-  //       //     !option3Values
-  //       //         .contains(variant.title.removeAllWhitespace.split("/").last)) {
-  //       //   bool option3HasAvailableQuantity = false;
-  //       //   for (ProductVariant variant3 in widget.product.productVariants) {
-  //       //     if (variant3.title.removeAllWhitespace.split("/").first ==
-  //       //             selectedOption &&
-  //       //         variant3.title.removeAllWhitespace.split("/").last ==
-  //       //             variant.title.removeAllWhitespace.split("/").last &&
-  //       //         variant3.quantityAvailable != null &&
-  //       //         variant3.quantityAvailable! > 0) {
-  //       //       option3HasAvailableQuantity = true;
-  //       //       break;
-  //       //     }
-  //       //   }
-  //       //   if (option3HasAvailableQuantity) {
-  //       //     option3Values
-  //       //         .add(variant.title.removeAllWhitespace.split("/").last);
-  //       //   }
-  //       // }
-  //     }
-  //   }
-
-  //   printOptionsList();
-  //   debugPrint("2nd Update method done. setting state.");
-  //   setState(() {});
-  // }
-
-  // void update3rdOptions(String selectedOption) {
-  //   debugPrint(
-  //       "3rd Update Option Called... 2nd option selected : ${selectedOption} :");
-  //   // option2Values.clear();
-  //   option3Values.clear();
-
-  //   for (ProductVariant variant in widget.product.productVariants) {
-  //     if (variant.title.removeAllWhitespace.split("/").first ==
-  //             selectedOption &&
-  //         variant.quantityAvailable != null &&
-  //         variant.quantityAvailable! > 0) {
-  //       // if (variant.title.removeAllWhitespace.split("/")[1] != null &&
-  //       //     !option2Values
-  //       //         .contains(variant.title.removeAllWhitespace.split("/")[1])) {
-  //       //   bool option2HasAvailableQuantity = false;
-  //       //   for (ProductVariant variant2 in widget.product.productVariants) {
-  //       //     if (variant2.title.removeAllWhitespace.split("/").first ==
-  //       //             selectedOption &&
-  //       //         variant2.title.removeAllWhitespace.split("/")[1] ==
-  //       //             variant.title.removeAllWhitespace.split("/")[1] &&
-  //       //         variant2.quantityAvailable != null &&
-  //       //         variant2.quantityAvailable! > 0) {
-  //       //       option2HasAvailableQuantity = true;
-  //       //       break;
-  //       //     }
-  //       //   }
-  //       //   if (option2HasAvailableQuantity) {
-  //       //     option2Values.add(variant.title.removeAllWhitespace.split("/")[1]);
-  //       //   }
-  //       // }
-
-  //       if (variant.title.removeAllWhitespace.split("/").last != null &&
-  //           !option3Values
-  //               .contains(variant.title.removeAllWhitespace.split("/").last)) {
-  //         bool option3HasAvailableQuantity = false;
-  //         for (ProductVariant variant3 in widget.product.productVariants) {
-  //           if (variant3.title.removeAllWhitespace.split("/").first ==
-  //                   selectedOption &&
-  //               variant3.title.removeAllWhitespace.split("/").last ==
-  //                   variant.title.removeAllWhitespace.split("/").last &&
-  //               variant3.quantityAvailable != null &&
-  //               variant3.quantityAvailable! > 0) {
-  //             option3HasAvailableQuantity = true;
-  //             break;
-  //           }
-  //         }
-  //         if (option3HasAvailableQuantity) {
-  //           option3Values
-  //               .add(variant.title.removeAllWhitespace.split("/").last);
-  //         }
-  //       }
-  //     }
-  //   }
-
-  //   printOptionsList();
-  //   debugPrint("3rd Update method done. setting state.");
-  //   setState(() {});
-  // }
   // This method updates the second option list based on the selected first option
   void updateOption2(String selectedOption1) {
     option2Values.clear();
 
     for (ProductVariant variant in widget.product.productVariants) {
-      if (variant.title.removeAllWhitespace.split("/").first ==
-              selectedOption1 &&
+      if (variant.title.split(" / ").first == selectedOption1 &&
           variant.quantityAvailable != null &&
           variant.quantityAvailable! > 0) {
-        if (!option2Values
-            .contains(variant.title.removeAllWhitespace.split("/")[1])) {
-          option2Values.add(variant.title.removeAllWhitespace.split("/")[1]);
+        if (!option2Values.contains(variant.title.split(" / ")[1])) {
+          option2Values.add(variant.title.split(" / ")[1]);
         }
       }
     }
@@ -977,14 +868,12 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
     option3Values.clear();
 
     for (ProductVariant variant in widget.product.productVariants) {
-      if (variant.title.removeAllWhitespace.split("/").first ==
-              selectedOption1 &&
-          variant.title.removeAllWhitespace.split("/")[1] == selectedOption2 &&
+      if (variant.title.split(" / ").first == selectedOption1 &&
+          variant.title.split(" / ")[1] == selectedOption2 &&
           variant.quantityAvailable != null &&
           variant.quantityAvailable! > 0) {
-        if (!option3Values
-            .contains(variant.title.removeAllWhitespace.split("/").last)) {
-          option3Values.add(variant.title.removeAllWhitespace.split("/").last);
+        if (!option3Values.contains(variant.title.split(" / ").last)) {
+          option3Values.add(variant.title.split(" / ").last);
         }
       }
     }
@@ -1055,7 +944,6 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
 
   namedColorToHex(String colorName) {
     // debugPrint("color received : $colorName");
-    // First, create a map of named colors to their corresponding MaterialColor objects
     Map<String, Color> colorMap = {
       'black': Colors.black,
       'white': Colors.white,
@@ -1133,5 +1021,22 @@ class _ProductDetailsUIState extends State<ProductDetailsUI> {
       // debugPrint("$element added... ${colorsInHex.toString()}");
     }
     debugPrint("Done converting...");
+  }
+
+  void getProductVariant(String productVariant) {
+    bool isFound = false;
+    for (ProductVariant variant in widget.product.productVariants) {
+      debugPrint("Found product variant : ${variant.title}");
+      if (variant.title == productVariant) {
+        productVariantSelected = variant;
+        isFound = true;
+        break;
+      }
+    }
+    if (isFound) {
+      debugPrint("Product Variant matched: ${productVariantSelected!.id}");
+    } else {
+      debugPrint("Product Variant not found...");
+    }
   }
 }

@@ -87,299 +87,331 @@ class _CartScreen2State extends State<CartScreen2> {
                         children: [
                           if (controller.cartModelItems.isNotEmpty)
                             GetX<CartController>(
-                                builder: (controller) => ListView(
-                                      scrollDirection: Axis.vertical,
-                                      shrinkWrap: true,
-                                      physics:
-                                          const NeverScrollableScrollPhysics(),
-                                      padding: const EdgeInsets.all(5),
-                                      children: controller.cartModelItems
-                                          .map((cartModelElement) {
-                                        return Dismissible(
-                                            background: Container(
-                                              color: Colors.red,
-                                              child: const Icon(
-                                                  CupertinoIcons.delete),
-                                            ),
-                                            key: ValueKey(cartModelElement),
-                                            onDismissed:
-                                                (DismissDirection direction) {
-                                              controller
-                                                  .removeItem(cartModelElement);
-                                            },
-                                            confirmDismiss: (DismissDirection
-                                                direction) async {
-                                              return await showDialog(
-                                                context: context,
-                                                builder:
-                                                    (BuildContext context) {
-                                                  return AlertDialog(
-                                                    icon: const Icon(Icons
-                                                        .warning_amber_outlined),
-                                                    iconColor: Colors.red,
-                                                    title: const Text(
-                                                        'Are you Sure'),
-                                                    content: Text(
-                                                        'Do you really want to remove '
-                                                        '${cartModelElement.product.title} from the cart?'),
-                                                    actions: <Widget>[
-                                                      ElevatedButton(
-                                                          onPressed: () =>
-                                                              Navigator.of(
-                                                                      context)
-                                                                  .pop(true),
-                                                          child: const Text(
-                                                              "Confirm")),
-                                                      OutlinedButton(
-                                                        onPressed: () =>
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop(false),
-                                                        child: const Text(
-                                                            "Cancel"),
-                                                      ),
-                                                    ],
-                                                  );
-                                                },
-                                              );
-                                            },
-                                            child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10.0,
-                                                        vertical: 15),
-                                                child: Stack(
+                              builder: (controller) => ListView(
+                                scrollDirection: Axis.vertical,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                padding: const EdgeInsets.all(5),
+                                children: controller.cartModelItems
+                                    .map((cartModelElement) {
+                                  return Dismissible(
+                                      background: Container(
+                                        color: Colors.red,
+                                        child:
+                                            const Icon(CupertinoIcons.delete),
+                                      ),
+                                      key: ValueKey(cartModelElement),
+                                      onDismissed:
+                                          (DismissDirection direction) {
+                                        controller.removeItem(cartModelElement);
+                                      },
+                                      confirmDismiss:
+                                          (DismissDirection direction) async {
+                                        return await showDialog(
+                                          context: context,
+                                          builder: (BuildContext context) {
+                                            return AlertDialog(
+                                              icon: const Icon(
+                                                  Icons.warning_amber_outlined),
+                                              iconColor: Colors.red,
+                                              title: const Text('Are you Sure'),
+                                              content: Text(
+                                                  'Do you really want to remove '
+                                                  '${cartModelElement.product.title} from the cart?'),
+                                              actions: <Widget>[
+                                                ElevatedButton(
+                                                    onPressed: () =>
+                                                        Navigator.of(context)
+                                                            .pop(true),
+                                                    child:
+                                                        const Text("Confirm")),
+                                                OutlinedButton(
+                                                  onPressed: () =>
+                                                      Navigator.of(context)
+                                                          .pop(false),
+                                                  child: const Text("Cancel"),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0, vertical: 15),
+                                          child: Stack(
+                                            children: [
+                                              Container(
+                                                height: 200,
+                                                width: size.width,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(15),
+                                                  color: Colors.white,
+                                                ),
+                                                child: Row(
                                                   children: [
-                                                    Container(
-                                                      height: 200,
-                                                      width: size.width,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                        color: Colors.white,
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                      child: CachedNetworkImage(
+                                                        imageUrl:
+                                                            cartModelElement
+                                                                .product
+                                                                .images
+                                                                .first
+                                                                .originalSrc,
+                                                        placeholder: (context,
+                                                                url) =>
+                                                            Image.asset(
+                                                                'assets/images/lime-light-logo.png',
+                                                                fit: BoxFit
+                                                                    .cover),
+                                                        errorWidget: (context,
+                                                                url, error) =>
+                                                            const Icon(
+                                                                Icons.error),
+                                                        fit: BoxFit.fill,
+                                                        width: 160,
+                                                        height: 180,
                                                       ),
-                                                      child: Row(
+                                                    ),
+                                                    Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
                                                         children: [
-                                                          ClipRRect(
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        15),
-                                                            child:
-                                                                CachedNetworkImage(
-                                                              imageUrl:
-                                                                  cartModelElement
-                                                                      .product
-                                                                      .images
-                                                                      .first
-                                                                      .originalSrc,
-                                                              placeholder: (context,
-                                                                      url) =>
-                                                                  Image.asset(
-                                                                      'assets/images/lime-light-logo.png',
-                                                                      fit: BoxFit
-                                                                          .cover),
-                                                              errorWidget: (context,
-                                                                      url,
-                                                                      error) =>
-                                                                  const Icon(Icons
-                                                                      .error),
-                                                              fit: BoxFit.fill,
-                                                              width: 160,
-                                                              height: 180,
+                                                          // Text(
+                                                          //   cartModelElement
+                                                          //           .product
+                                                          //           .collectionList
+                                                          //           ?.first
+                                                          //           .title ??
+                                                          //       '',
+                                                          //   style: const TextStyle(
+                                                          //       color: Colors
+                                                          //           .black,
+                                                          //       fontWeight:
+                                                          //           FontWeight
+                                                          //               .bold,
+                                                          //       fontSize: 21),
+                                                          // ),
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Container(
+                                                            width: 200,
+                                                            height: 50,
+                                                            child: Text(
+                                                              cartModelElement
+                                                                  .product
+                                                                  .title,
+                                                              softWrap: true,
+                                                              style: const TextStyle(
+                                                                  color: Colors
+                                                                      .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontSize: 14),
                                                             ),
                                                           ),
-                                                          Column(
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .start,
-                                                              children: [
-                                                                Text(
-                                                                  cartModelElement
-                                                                          .product
-                                                                          .collectionList
-                                                                          ?.first
-                                                                          .title ??
-                                                                      '',
-                                                                  style: const TextStyle(
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      fontSize:
-                                                                          21),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 10,
-                                                                ),
-                                                                Container(
-                                                                  width: 200,
-                                                                  height: 50,
-                                                                  child: Text(
-                                                                    cartModelElement
-                                                                        .product
-                                                                        .title,
-                                                                    softWrap:
-                                                                        true,
-                                                                    style: const TextStyle(
-                                                                        color: Colors
-                                                                            .black,
-                                                                        fontWeight:
-                                                                            FontWeight
-                                                                                .w600,
-                                                                        fontSize:
-                                                                            14),
-                                                                  ),
-                                                                ),
-                                                                const SizedBox(
-                                                                  height: 10,
-                                                                ),
-                                                                cartModelElement
-                                                                            .product
-                                                                            .option
-                                                                            .length >
-                                                                        1
-                                                                    ? Text(
-                                                                        '${cartModelElement.product.option.first.name}/${cartModelElement.product.option[1].name} : ${cartModelElement.productVariant.title}',
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                Colors.black45,
-                                                                            fontSize: 13),
-                                                                      )
-                                                                    : Text(
-                                                                        '${cartModelElement.product.option.first.name} : ${cartModelElement.productVariant.title}',
-                                                                        style: const TextStyle(
-                                                                            color:
-                                                                                Colors.black45,
-                                                                            fontSize: 13),
-                                                                      ),
-                                                                const SizedBox(
-                                                                  height: 12,
-                                                                ),
-                                                                Row(
+                                                          const SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          cartModelElement
+                                                                      .product
+                                                                      .option
+                                                                      .length >
+                                                                  1
+                                                              ? Column(
                                                                   crossAxisAlignment:
                                                                       CrossAxisAlignment
-                                                                          .center,
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
                                                                           .start,
                                                                   children: [
-                                                                    const Icon(
-                                                                      CupertinoIcons
-                                                                          .money_dollar,
-                                                                      color: Colors
-                                                                          .orange,
-                                                                      size: 28,
+                                                                    Text(
+                                                                      '${cartModelElement.product.option.first.name}${cartModelElement.product.option.length > 2 ? ' / ${cartModelElement.product.option[1].name} / ${cartModelElement.product.option[2].name}' : ' / ${cartModelElement.product.option[1].name}'} :',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: Colors
+                                                                            .black45,
+                                                                        fontSize:
+                                                                            13,
+                                                                      ),
                                                                     ),
                                                                     Text(
-                                                                      cartModelElement
-                                                                          .productVariant
-                                                                          .price
-                                                                          .amount
-                                                                          .toStringAsFixed(
-                                                                              2),
-                                                                      style: const TextStyle(
-                                                                          color: Colors
-                                                                              .black,
-                                                                          fontSize:
-                                                                              20),
+                                                                      '${cartModelElement.productVariant.title}',
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        color: Colors
+                                                                            .black45,
+                                                                        fontSize:
+                                                                            13,
+                                                                      ),
                                                                     ),
                                                                   ],
+                                                                )
+                                                              : Text(
+                                                                  '${cartModelElement.product.option.first.name} : ${cartModelElement.productVariant.title}',
+                                                                  style: const TextStyle(
+                                                                      color: Colors
+                                                                          .black45,
+                                                                      fontSize:
+                                                                          13),
                                                                 ),
-                                                                const SizedBox(
-                                                                  height: 20,
-                                                                ),
-                                                                Align(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .bottomCenter,
-                                                                  child: Row(
+                                                          const SizedBox(
+                                                            height: 12,
+                                                          ),
+                                                          Row(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .center,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              const Icon(
+                                                                CupertinoIcons
+                                                                    .money_dollar,
+                                                                color: Colors
+                                                                    .orange,
+                                                                size: 28,
+                                                              ),
+                                                              Text(
+                                                                cartModelElement
+                                                                    .productVariant
+                                                                    .price
+                                                                    .amount
+                                                                    .toStringAsFixed(
+                                                                        2),
+                                                                style: const TextStyle(
+                                                                    color: Colors
+                                                                        .black,
+                                                                    fontSize:
+                                                                        20),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          const SizedBox(
+                                                            height: 20,
+                                                          ),
+                                                          Align(
+                                                            alignment: Alignment
+                                                                .bottomCenter,
+                                                            child: Row(
+                                                              children: [
+                                                                SizedBox(
+                                                                  height: 28,
+                                                                  width: 83,
+                                                                  child: Stack(
+                                                                    alignment:
+                                                                        Alignment
+                                                                            .bottomLeft,
                                                                     children: [
-                                                                      SizedBox(
-                                                                        height:
-                                                                            28,
-                                                                        width:
-                                                                            83,
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment.center,
                                                                         child:
-                                                                            Stack(
+                                                                            Container(
+                                                                          height:
+                                                                              17,
+                                                                          width:
+                                                                              51,
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color:
+                                                                                Colors.grey.shade100,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          cartController
+                                                                              .increaseQuantity(cartModelElement);
+                                                                        },
+                                                                        child:
+                                                                            Align(
                                                                           alignment:
-                                                                              Alignment.bottomLeft,
-                                                                          children: [
+                                                                              Alignment.centerRight,
+                                                                          child:
+                                                                              Container(
+                                                                            decoration:
+                                                                                ShapeDecoration(
+                                                                              color: Colors.grey.shade100,
+                                                                              shape: const CircleBorder(
+                                                                                side: BorderSide(color: Colors.white, width: 3, style: BorderStyle.solid),
+                                                                              ),
+                                                                            ),
+                                                                            child:
+                                                                                const Icon(
+                                                                              CupertinoIcons.plus,
+                                                                              size: 20,
+                                                                            ),
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          cartController
+                                                                              .decreaseQuantity(cartModelElement);
+                                                                        },
+                                                                        child:
                                                                             Align(
-                                                                              alignment: Alignment.center,
-                                                                              child: Container(
-                                                                                height: 17,
-                                                                                width: 51,
-                                                                                decoration: BoxDecoration(
-                                                                                  color: Colors.grey.shade100,
-                                                                                ),
+                                                                          alignment:
+                                                                              Alignment.centerLeft,
+                                                                          child:
+                                                                              Container(
+                                                                            decoration:
+                                                                                ShapeDecoration(
+                                                                              color: Colors.grey.shade100,
+                                                                              shape: const CircleBorder(
+                                                                                side: BorderSide(color: Colors.white, width: 3, style: BorderStyle.solid),
                                                                               ),
                                                                             ),
-                                                                            GestureDetector(
-                                                                              onTap: () {
-                                                                                cartController.increaseQuantity(cartModelElement);
-                                                                              },
-                                                                              child: Align(
-                                                                                alignment: Alignment.centerRight,
-                                                                                child: Container(
-                                                                                  decoration: ShapeDecoration(
-                                                                                    color: Colors.grey.shade100,
-                                                                                    shape: const CircleBorder(
-                                                                                      side: BorderSide(color: Colors.white, width: 3, style: BorderStyle.solid),
-                                                                                    ),
-                                                                                  ),
-                                                                                  child: const Icon(
-                                                                                    CupertinoIcons.plus,
-                                                                                    size: 20,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
+                                                                            child:
+                                                                                const Icon(
+                                                                              CupertinoIcons.minus,
+                                                                              size: 20,
                                                                             ),
-                                                                            GestureDetector(
-                                                                              onTap: () {
-                                                                                cartController.decreaseQuantity(cartModelElement);
-                                                                              },
-                                                                              child: Align(
-                                                                                alignment: Alignment.centerLeft,
-                                                                                child: Container(
-                                                                                  decoration: ShapeDecoration(
-                                                                                    color: Colors.grey.shade100,
-                                                                                    shape: const CircleBorder(
-                                                                                      side: BorderSide(color: Colors.white, width: 3, style: BorderStyle.solid),
-                                                                                    ),
-                                                                                  ),
-                                                                                  child: const Icon(
-                                                                                    CupertinoIcons.minus,
-                                                                                    size: 20,
-                                                                                  ),
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                            Align(
-                                                                              alignment: Alignment.center,
-                                                                              child: Text(
-                                                                                cartModelElement.quantity.toString(),
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                textAlign: TextAlign.left,
-                                                                                style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500, color: Colors.black),
-                                                                              ),
-                                                                            ),
-                                                                          ],
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                      Align(
+                                                                        alignment:
+                                                                            Alignment.center,
+                                                                        child:
+                                                                            Text(
+                                                                          cartModelElement
+                                                                              .quantity
+                                                                              .toString(),
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          textAlign:
+                                                                              TextAlign.left,
+                                                                          style: const TextStyle(
+                                                                              fontSize: 15,
+                                                                              fontWeight: FontWeight.w500,
+                                                                              color: Colors.black),
                                                                         ),
                                                                       ),
                                                                     ],
                                                                   ),
                                                                 ),
-                                                              ]),
-                                                        ],
-                                                      ),
-                                                    ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ]),
                                                   ],
-                                                )));
-                                      }).toList(),
-                                    ))
+                                                ),
+                                              ),
+                                            ],
+                                          )));
+                                }).toList(),
+                              ),
+                            ),
                         ],
                       ),
                     );
